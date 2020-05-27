@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cerebro
+  labels:
+    service: cerebro
+spec:
+  type: NodePort
+  selector:
+    run: cerebro
+  ports:
+    - port: 9000
+      targetPort: 9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerebro
+spec:
+  selector:
+    matchLabels:
+      run: cerebro
+  template:
+    metadata:
+      labels:
+        run: cerebro
+    spec:
+      containers:
+        - name: cerebro
+          image: lmenezes/cerebro:0.8.5
+          ports:
+            - containerPort: 9000
+              name: http
+              protocol: TCP
